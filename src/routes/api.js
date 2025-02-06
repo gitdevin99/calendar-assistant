@@ -7,20 +7,25 @@ axios.defaults.headers.common['User-Agent'] = 'Calendar-Assistant-Bot';
 const router = express.Router();
 const calendarService = require('../services/calendar');
 
-// Middleware to verify tunnel password
-const verifyTunnelPassword = (req, res, next) => {
-    const password = req.query.password || req.headers.authorization?.split(' ')[1];
-    const expectedPassword = '0.227.76.143';
+// Middleware to verify API password
+const verifyApiPassword = (req, res, next) => {
+    const password = req.headers.password || req.query.password;
+    const expectedPassword = process.env.TUNNEL_PASSWORD;
+    
+    if (!expectedPassword) {
+        console.error('TUNNEL_PASSWORD environment variable not set');
+        return res.status(500).json({ error: 'Server configuration error' });
+    }
     
     if (password === expectedPassword) {
         next();
     } else {
-        res.status(401).json({ error: 'Invalid tunnel password' });
+        res.status(401).json({ error: 'Invalid or missing password' });
     }
 };
 
 // Apply password verification to all routes
-router.use(verifyTunnelPassword);
+router.use(verifyApiPassword);
 
 // Test endpoint to verify access
 router.get('/test', (req, res) => {
