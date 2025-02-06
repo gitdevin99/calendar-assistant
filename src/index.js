@@ -7,11 +7,20 @@ const session = require('express-session');
 const app = express();
 
 // Middleware
-// Configure CORS for ElevenLabs domain
+// Configure CORS
 app.use(cors({
-    origin: ['https://elevenlabs.io', 'http://localhost:3001'],
-    methods: ['GET', 'POST'],
-    credentials: true
+    origin: function(origin, callback) {
+        const allowedOrigins = [
+            'https://elevenlabs.io',
+            'http://localhost:3001',
+            'https://calendar-assistant-xq3t.onrender.com',
+            'https://accounts.google.com'
+        ];
+        callback(null, allowedOrigins.includes(origin) || !origin);
+    },
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
