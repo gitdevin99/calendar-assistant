@@ -22,13 +22,24 @@ router.get('/google', (req, res) => {
 // Handle Google OAuth callback
 router.get('/google/callback', async (req, res) => {
     try {
+        console.log('Received callback with code:', req.query.code);
         const { code } = req.query;
+        console.log('Getting tokens from Google...');
         const { tokens } = await oauth2Client.getToken(code);
+        console.log('Received tokens:', tokens);
         oauth2Client.setCredentials(tokens);
 
         // Store tokens in session
         req.session.token = tokens;
-        req.session.save(() => {
+        console.log('Session before save:', req.session);
+        
+        req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.status(500).send('Session save failed');
+            }
+            console.log('Session saved successfully');
+            console.log('Final session state:', req.session);
             res.redirect('/');
         });
     } catch (error) {
@@ -39,8 +50,11 @@ router.get('/google/callback', async (req, res) => {
 
 // Check authentication status
 router.get('/status', (req, res) => {
+    console.log('Checking auth status. Session:', req.session);
+    const isAuthenticated = !!req.session?.token;
+    console.log('Is authenticated:', isAuthenticated);
     res.json({
-        authenticated: !!req.session.token
+        authenticated: isAuthenticated
     });
 });
 

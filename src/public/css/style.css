@@ -100,6 +100,24 @@ body {
     font-size: 1.2em !important;
 }
 
+.success-message {
+    color: #28a745;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #d4edda;
+    border-radius: 4px;
+}
+
+.error-message {
+    color: #dc3545;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f8d7da;
+    border-radius: 4px;
+}
+
 elevenlabs-convai {
     display: block;
     margin: 20px 0;
