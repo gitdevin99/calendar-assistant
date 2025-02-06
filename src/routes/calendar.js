@@ -6,16 +6,13 @@ const router = express.Router();
 // Get calendar events
 router.get('/events', async (req, res) => {
     try {
-        // Get access token from session
-        const accessToken = req.session?.oauth?.access_token;
-        if (!accessToken) {
+        // Check if user is authenticated via session
+        if (!req.session || !req.session.token) {
             return res.status(401).json({ error: 'Not authenticated' });
         }
 
-        // Set credentials
-        oauth2Client.setCredentials({
-            access_token: accessToken
-        });
+        // Set credentials from session token
+        oauth2Client.setCredentials(req.session.token);
 
         const start = req.query.start || new Date().toISOString();
         const end = req.query.end || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
@@ -42,9 +39,14 @@ router.get('/events', async (req, res) => {
         res.json(events);
     } catch (error) {
         console.error('Error fetching calendar events:', error);
+        if (error.code === 401) {
+            return res.status(401).json({ error: 'Authentication expired' });
+        }
         res.status(500).json({ error: 'Failed to fetch calendar events' });
     }
 });
+
+module.exports = router;
 const calendarService = require('../services/calendar');
 
 router.get('/available-slots', async (req, res) => {
