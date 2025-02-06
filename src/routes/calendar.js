@@ -1,12 +1,21 @@
 const express = require('express');
+const { google } = require('googleapis');
+const { oauth2Client } = require('../services/auth');
 const router = express.Router();
 
 // Get calendar events
 router.get('/events', async (req, res) => {
     try {
-        if (!req.user) {
+        // Get access token from session
+        const accessToken = req.session?.oauth?.access_token;
+        if (!accessToken) {
             return res.status(401).json({ error: 'Not authenticated' });
         }
+
+        // Set credentials
+        oauth2Client.setCredentials({
+            access_token: accessToken
+        });
 
         const start = req.query.start || new Date().toISOString();
         const end = req.query.end || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();

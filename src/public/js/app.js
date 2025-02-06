@@ -27,7 +27,7 @@ function initializeCalendar() {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
-        events: '/calendar/events',
+        events: '/api/calendar/events',
         eventClick: function(info) {
             const event = info.event;
             const details = [
