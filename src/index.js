@@ -33,9 +33,23 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         secure: process.env.NODE_ENV === 'production',
-        httpOnly: true
-    }
+        httpOnly: true,
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    },
+    name: 'calendar.sid'
 }));
+
+// Debug middleware to log session state
+app.use((req, res, next) => {
+    console.log('Session Debug:', {
+        hasSession: !!req.session,
+        sessionID: req.session?.id,
+        hasToken: !!(req.session && req.session.token),
+        cookies: req.headers.cookie
+    });
+    next();
+});
 
 // Add headers to bypass localtunnel reminder
 app.use((req, res, next) => {
