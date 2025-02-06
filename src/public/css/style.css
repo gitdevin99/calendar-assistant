@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.auth-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.google-signin-btn {
+    display: inline-block;
+    background-color: #4285f4;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.google-signin-btn:hover {
+    background-color: #357abd;
+}
+
+.agent-container {
+    margin-top: 20px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.instructions {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.steps {
+    margin-bottom: 30px;
+    padding-left: 20px;
+}
+
+.steps li {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.agent-link {
+    display: inline-block;
+    background-color: #2196f3;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.agent-link:hover {
+    background-color: #1976d2;
+}
+
+.agent-info {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+.agent-info p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.agent-info ul {
+    padding-left: 20px;
+}
+
+.agent-info li {
+    margin-bottom: 8px;
+    color: #666;
+}
