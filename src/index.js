@@ -3,6 +3,20 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
+const Redis = require('redis');
+const connectRedis = require('connect-redis');
+
+// Initialize Redis client
+const RedisStore = connectRedis(session);
+const redisClient = Redis.createClient({
+    url: process.env.REDIS_URL || 'redis://localhost:6379',
+    legacyMode: true
+});
+
+redisClient.connect().catch(console.error);
+
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
+redisClient.on('connect', () => console.log('Connected to Redis'));
 
 const app = express();
 
@@ -28,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Session middleware
 app.use(session({
+    store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
@@ -39,6 +54,15 @@ app.use(session({
     },
     name: 'calendar.sid'
 }));
+
+// Add Redis error handling middleware
+app.use((req, res, next) => {
+    if (!req.session) {
+        console.error('Session store is not available');
+        return next(new Error('Session store is not available'));
+    }
+    next();
+});
 
 // Debug middleware to log session state
 app.use((req, res, next) => {
