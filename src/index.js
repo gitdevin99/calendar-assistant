@@ -3,14 +3,12 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
-const Redis = require('redis');
-const connectRedis = require('connect-redis');
+const { createClient } = require('redis');
+const RedisStore = require('connect-redis').default;
 
 // Initialize Redis client
-const RedisStore = connectRedis(session);
-const redisClient = Redis.createClient({
-    url: process.env.REDIS_URL || 'redis://localhost:6379',
-    legacyMode: true
+const redisClient = createClient({
+    url: process.env.REDIS_URL || 'redis://localhost:6379'
 });
 
 redisClient.connect().catch(console.error);
